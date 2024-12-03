@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Jobs;
+use App\Models\Application;
 use Illuminate\Http\Request;
 
-class JobsController extends Controller
+class ApplicationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class JobsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Jobs $jobs)
+    public function show(Application $application)
     {
         //
     }
@@ -42,7 +42,7 @@ class JobsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Jobs $jobs)
+    public function edit(Application $application)
     {
         //
     }
@@ -50,7 +50,7 @@ class JobsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Jobs $jobs)
+    public function update(Request $request, Application $application)
     {
         //
     }
@@ -58,7 +58,7 @@ class JobsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Jobs $jobs)
+    public function destroy(Application $application)
     {
         //
     }
