@@ -7,6 +7,6 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 <body>
-    <x-user-navbar></x-user-navbar>
+    <x-admin-navbar></x-admin-navbar>
 </body>
 </html>
