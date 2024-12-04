@@ -30,7 +30,7 @@ Route::prefix('admin')->middleware('role:admin')->group(function() {
     Route::resource('company', AdminCompanyController::class)->names('admin.company');
 });
 
-Route::prefix('user')->middleware('role:user')->group(function() {
+Route::prefix('user')->middleware('role:user|admin')->group(function() {
     Route::resource('home', UserHomeController::class)->names('user.home');
     Route::resource('jobs', UserJobsController::class)->names('user.jobs');
 });
