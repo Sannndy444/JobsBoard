@@ -4,14 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Location extends Model
+class Type extends Model
 {
-    protected $table = 'location';
-
-    protected $fillable = [
-        'name',
-        'description',
-    ];
+    protected $guarded = ['id'];
 
     function works()
     {

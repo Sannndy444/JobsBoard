@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Application extends Model
 {
-    protected $fillable = [
-        'resume',
-        'cover_letter',
-        'status'
+    protected $guarded = [
+        'id',
     ];
 
     function work()

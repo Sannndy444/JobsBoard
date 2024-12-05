@@ -7,6 +7,12 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 <body>
-    <form action="{{ route('') }}"></form>
+    <x-admin-navbar></x-admin-navbar>
+
+    <a href="{{ route('admin.jobs.index') }}">Back</a> <br>
+
+    <form action="{{ route('') }}">
+        
+    </form>
 </body>
 </html>

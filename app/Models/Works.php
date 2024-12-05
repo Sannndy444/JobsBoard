@@ -6,26 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Works extends Model
 {
-    protected $fillable = [
-        'title',
-        'image',
-        'description',
-        'salary',
-        'type',
+    protected $guarded = [
+        'id',
     ];
 
     function location()
     {
-        $this->hasMany(Location::class);
+        $this->belongsTo(Location::class);
     }
 
     function company()
     {
-        $this->hasMany(Company::class);
+        $this->belongsTo(Company::class);
     }
 
     function application()
     {
         $this->hasMany(Application::class);
+    }
+
+    function type()
+    {
+        $this->belongsTo(Type::class);
     }
 }

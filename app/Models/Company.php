@@ -15,6 +15,6 @@ class Company extends Model
 
     function works()
     {
-        $this->belongsTo(Works::class);
+        $this->hasMany(Works::class);
     }
 }

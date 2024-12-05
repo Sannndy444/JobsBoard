@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminCompanyController;
 use App\Http\Controllers\AdminLocationController;
 use App\Http\Controllers\UserHomeController;
 use App\Http\Controllers\UserJobsController;
+use App\Http\Controllers\TypeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +29,7 @@ Route::prefix('admin')->middleware('role:admin')->group(function() {
     Route::resource('jobs', AdminJobsController::class)->names('admin.jobs');
     Route::resource('location', AdminLocationController::class)->names('admin.location');
     Route::resource('company', AdminCompanyController::class)->names('admin.company');
+    Route::resource('type', TypeController::class)->names('admin.type');
 });
 
 Route::prefix('user')->middleware('role:user|admin')->group(function() {
