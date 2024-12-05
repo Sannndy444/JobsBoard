@@ -8,6 +8,7 @@ class Works extends Model
 {
     protected $fillable = [
         'title',
+        'image',
         'description',
         'salary',
         'type',

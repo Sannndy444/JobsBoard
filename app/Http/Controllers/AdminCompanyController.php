@@ -27,8 +27,8 @@ class AdminCompanyController extends Controller
             'companyName' => 'required|string|max:255',
             'companyDescription' => 'required|string|max:255',
         ],[
-            'companyName.required' => 'Name Field Is Required',
-            'companyDescription.required' => 'Description Field Is Required',
+            'companyName.required' => 'Company Name Field Is Required',
+            'companyDescription.required' => 'Company Description Field Is Required',
         ]);
 
             if($validator->fails()) {
@@ -44,12 +44,11 @@ class AdminCompanyController extends Controller
             ]);
 
             return redirect()->route('admin.company.index')
-                            ->with('success', 'Company Add Success');
+                            ->with('success', 'Company Added Success');
     }
 
-    public function edit()
+    public function edit(Company $company)
     {
-        $company = Company::all();
         
         return view('admin.company.edit', compact('company'));
     }
@@ -57,11 +56,11 @@ class AdminCompanyController extends Controller
     public function update(Request $request, Company $company)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'companyName' => 'required|string|max:255',
+            'companyDescription' => 'required|string|max:255',
         ],[
-            'name.required' => 'Name Field Is Required',
-            'description.required' => 'Description Field Is Required',
+            'companyName.required' => 'Name Field Is Required',
+            'companyDescription.required' => 'Description Field Is Required',
         ]);
 
             if($validator->fails()) {
@@ -72,8 +71,8 @@ class AdminCompanyController extends Controller
             }
 
             $company->update([
-                'name' => $request->name,
-                'description' => $request->description, 
+                'name' => $request->companyName,
+                'description' => $request->companyDescription, 
             ]);
 
             return redirect()->route('admin.company.index')
@@ -87,7 +86,8 @@ class AdminCompanyController extends Controller
             return redirect()->route('admin.company.index')
                             ->with('success', 'Company Delete Success');
         } catch(\Exception $e) {
-            return redirect()->route('admin.company.index')->with('error', 'Company Delete Error');
+            return redirect()->route('admin.company.index')
+                            ->with('error', 'Company Delete Error');
         }
     }
 }

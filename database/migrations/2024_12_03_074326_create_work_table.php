@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('work', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('image');
             $table->string('description');
             $table->foreignId('location_id')->constrained('location')->onDelete('restrict');
             $table->foreignId('company_id')->constrained('company')->onDelete('restrict');
