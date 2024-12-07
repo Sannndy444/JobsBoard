@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('image')->nullable();
-            $table->string('description');
+            $table->text('description');
             $table->foreignId('location_id')->constrained('location')->onDelete('restrict');
             $table->foreignId('company_id')->constrained('company')->onDelete('restrict');
             $table->foreignId('type_id')->constrained('types')->onDelete('restrict');
-            $table->string('type');
+            $table->integer('salary');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('work');
     }
 };

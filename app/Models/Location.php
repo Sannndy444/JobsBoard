@@ -15,6 +15,6 @@ class Location extends Model
 
     function works()
     {
-        $this->hasMany(Works::class);
+        return $this->hasMany(Works::class);
     }
 }

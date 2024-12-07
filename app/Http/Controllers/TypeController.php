@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Type;
+use App\Models\Types;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,7 +13,7 @@ class TypeController extends Controller
      */
     public function index()
     {
-        $type = Type::all();
+        $type = Types::all();
         return view('admin.type.index', compact('type'));
     }
 
@@ -44,7 +44,7 @@ class TypeController extends Controller
                                 ->withInput();
             }
 
-            Type::create([
+            Types::create([
                 'name' => $request->typeName,
             ]);
 
@@ -55,7 +55,7 @@ class TypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Type $type)
+    public function show(Types $type)
     {
         //
     }
@@ -63,7 +63,7 @@ class TypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Type $type)
+    public function edit(Types $type)
     {
         return view('admin.type.edit', compact('type'));
     }
@@ -71,7 +71,7 @@ class TypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Type $type)
+    public function update(Request $request, Types $type)
     {
         $validator = Validator::make($request->all(), [
             'typeName' => 'required|string|max:255|unique:types,id',
@@ -99,7 +99,7 @@ class TypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Type $type)
+    public function destroy(Types $type)
     {
         try{
             $type->delete();

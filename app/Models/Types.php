@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Type extends Model
+class Types extends Model
 {
+    protected $table = 'types';
+
     protected $guarded = ['id'];
 
     function works()
     {
-        $this->hasMany(Works::class);
+        return $this->hasMany(Works::class);
     }
 }

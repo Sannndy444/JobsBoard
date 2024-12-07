@@ -12,11 +12,11 @@ class Application extends Model
 
     function work()
     {
-        $this->belongsTo(Works::class);
+        return $this->belongsTo(Works::class);
     }
 
     function user()
     {
-        $this->belongsTo(User::class);
+        return $this->hasMany(User::class);
     }
 }
