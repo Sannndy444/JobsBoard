@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminLocationController;
 use App\Http\Controllers\UserHomeController;
 use App\Http\Controllers\UserJobsController;
 use App\Http\Controllers\TypeController;
+use App\Http\Controllers\ApplicationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,11 +31,13 @@ Route::prefix('admin')->middleware('role:admin')->group(function() {
     Route::resource('location', AdminLocationController::class)->names('admin.location');
     Route::resource('company', AdminCompanyController::class)->names('admin.company');
     Route::resource('type', TypeController::class)->names('admin.type');
+    Route::resource('application', ApplicationController::class)->names('admin.application');
 });
 
 Route::prefix('user')->middleware('role:user|admin')->group(function() {
     Route::resource('home', UserHomeController::class)->names('user.home');
     Route::resource('jobs', UserJobsController::class)->names('user.jobs');
+    Route::get('/jobs/assign/{id}', [UserJobsController::class, 'assign'])->name('user.jobs.assign');
 });
 
 require __DIR__.'/auth.php';

@@ -64,9 +64,7 @@
                                 </td>
                                 <td>
                                     @if ($j->image)
-                                        <img src="{{ asset('storage/JobsImage/' . $j->image) }}" alt="Jobs Image" style="width: 100px; height: auto;">
-                                    @else
-                                        <p>No Image Available</p>
+                                        <img src="{{ asset('/storage/' . $j->image) }}" alt="Jobs Image" style="width: 100px; height: auto;">
                                     @endif
                                 </td>
                                 <td>
@@ -77,7 +75,9 @@
                                 <td>{{ $j->type->name }}</td>
                                 <td>{{ $j->salary }}</td>
                                 <td>
-                                    <form action="{{ route('admin.jobs.destroy', $j->id) }}">
+                                    <form action="{{ route('admin.jobs.destroy', $j->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
                                         <button type="submit">
                                             Delete
                                         </button>

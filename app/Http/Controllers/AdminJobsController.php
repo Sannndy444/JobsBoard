@@ -29,31 +29,32 @@ class AdminJobsController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'jobsTitle' => 'required|string|max:255',
-            'jobsImage' => 'required|image|mimes:jpg,png,jpeg|max:2048',
-            'jobsDescription' => 'required|string|max:5000',
-            'jobsCompany' => 'required|exists:company,id',
-            'jobsLocation' => 'required|exists:location,id',
-            'jobsType' => 'required|exists:types,id',
-            'jobsSalary' => 'required|string|max:255',
-        ],[
-            'jobsTitle.required' => 'Jobs Title Field Is Required',
-            'jobsImage,mimes' => 'File Image Not Support',
-            'jobsImage.required' => 'Jobs Image Is Required',
-            'jobsCompany.required' => 'Jobs Company Field Is Required',
-            'jobsLocation.required' => 'Jobs Locatioon Field Is Required',
-            'jobsType.required' => 'Jobs Type Field Is Required',
-            'jobsSalary.required' => 'Jobs Salary Field Is Required',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'jobsTitle' => 'required|string|max:255',
+        //     'jobsImage' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+        //     'jobsDescription' => 'required|string|max:5000',
+        //     'jobsCompany' => 'required|exists:company,id',
+        //     'jobsLocation' => 'required|exists:location,id',
+        //     'jobsType' => 'required|exists:types,id',
+        //     'jobsSalary' => 'required|string|max:255',
+        // ],[
+        //     'jobsTitle.required' => 'Jobs Title Field Is Required',
+        //     'jobsImage,mimes' => 'File Image Not Support',
+        //     'jobsImage.required' => 'Jobs Image Is Required',
+        //     'jobsCompany.required' => 'Jobs Company Field Is Required',
+        //     'jobsLocation.required' => 'Jobs Locatioon Field Is Required',
+        //     'jobsType.required' => 'Jobs Type Field Is Required',
+        //     'jobsSalary.required' => 'Jobs Salary Field Is Required',
+        // ]);
 
-            if($validator->fails()) {
-                $error = $validator->errors();
-                return redirect()->route('admin.jobs.create')
-                                ->withErrors($validator)
-                                ->withInput();
-            }
+        //     if($validator->fails()) {
+        //         $error = $validator->errors();
+        //         return redirect()->route('admin.jobs.create')
+        //                         ->withErrors($validator)
+        //                         ->withInput();
+        //     }
 
+        
             if ($request->hasFile('jobsImage')) {
                 $image = $request->file('jobsImage');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -135,10 +136,10 @@ class AdminJobsController extends Controller
                                 ->with('success', 'Jobs Update Success');
     }
 
-    public function destroy(Works $jobs)
+    public function destroy(Works $job)
     {
         try{
-            $jobs->delete();
+            $job->delete();
             return redirect()->route('admin.jobs.index')
                             ->with('success', 'Jobs Delete Success');
         } catch(\Exception $e) {

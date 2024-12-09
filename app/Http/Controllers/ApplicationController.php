@@ -12,7 +12,9 @@ class ApplicationController extends Controller
      */
     public function index()
     {
-        //
+        $application = Application::all();
+
+        return view('admin.application.index', compact('application'));
     }
 
     /**
