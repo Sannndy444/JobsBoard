@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Works;
 use App\Models\Application;
+use App\Models\JobAssignments;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\Status;
 
 
 class UserJobsController extends Controller
@@ -14,6 +16,7 @@ class UserJobsController extends Controller
     public function index()
     {
         $jobs = Works::with('company', 'location', 'type')->get();
+        
 
         return view('user.jobs.index', compact('jobs'));
     }
@@ -24,22 +27,26 @@ class UserJobsController extends Controller
         return view('user.jobs.create');
     }
 
+    public function show($job)
+    {
+        return view('user.jobs.show', compact('job'));
+    }
+
     public function store(Request $request, Works $jobs)
     {
 
-        // $validator = Validator::make($request->all(), [
-        //     'work_id' => 'required|exists:work,id',
-        //     'resume' => 'required|image|mimes:jpg,png,jpeg|max:2048',
-        //     'cover_letter' => 'required|image|mimes:jpg,png,jpeg|max:2048',
-        //     'status' => 'required|string|max:255'
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'work_id' => 'required|exists:work,id',
+            'resume' => 'required|mimes:pdf|max:2048',
+            'cover_letter' => 'required|mimes:pdf|max:2048',
+        ]);
 
-        //     if($validator->fails()) {
-        //         $error = $validator->errors();
-        //         return redirect()->route('user.jobs.index')
-        //                         ->withErrors($validator)
-        //                         ->withInput();
-        //     }
+            if($validator->fails()) {
+                $error = $validator->errors();
+                return redirect()->route('user.jobs.index')
+                                ->withErrors($validator)
+                                ->withInput();
+            }
 
             $resume = $this->uploadFile($request->file('resume'), 'resume');
             $cover_letter = $this->uploadFile($request->file('cover_letter'), 'CoverLetter');
@@ -50,16 +57,17 @@ class UserJobsController extends Controller
                     'user_id' => auth()->id(),
                     'resume' => $resume,
                     'cover_letter' => $cover_letter,
-                    'status' => $request->status,
+                    'status' => Status::Pending,
                 ]);
 
                 return redirect()->route('user.jobs.index')
                                 ->with('success', 'Assign Jobs Send');
     }
 
-    public function assign($id)
+    public function assign($job)
     {
-        $jobs = $id;
+        $jobs =  $job;
+
         return view('user.jobs.assign', compact('jobs'));
     }
 
@@ -71,4 +79,7 @@ class UserJobsController extends Controller
         }
         return null;
     }
+
+    
+
 }

@@ -36,10 +36,48 @@
             </div>
         @endforeach
     @endif
+    @if (session('success'))
+            <div class="flex items-center p-4 mb-4 text-sm text-grenn-800 rounded-lg bg-grenn-50 dark:bg-gray-800 dark:text-grenn-400" role="alert">
+                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span class="sr-only">Info</span>
+                <div>
+                    <span class="font-medium">Success!</span> {{ session('success') }}
+                </div>
+            </div>
+    @endif
     <div class="py-1">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-between bg-gray-700 overflow-hidden shadow-sm sm:rounded-lg">
-                <table>
+                @foreach ($jobs as $j)
+                    <div class="flex flex-wrap p-2 gap-4">
+                        <!-- Card 1 -->
+                        <div class="flex flex-col bg-white shadow-md rounded-lg p-4 w-full md:w-[250px] min-h-[200px]">
+                            <h2 class="text-lg font-semibold">{{ $j->title }}</h2>
+                            <p class="text-gray-600 flex-grow">
+                            {{ $j->company->name }}
+                            </p>
+                            <p class="text-gray-600 flex-grow">
+                            {{ $j->type->name }}
+                            </p>
+                            <form action="{{ route('admin.jobs.show', $j->id) }}">
+                                <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg">
+                                    Show More
+                                </button>
+                            </form>
+                            <form action="{{ route('admin.jobs.destroy', $j->id) }}">
+                                <button class="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg">
+                                    Delete
+                                </button>
+                            </form>
+                            
+                        </div>
+                    </div>
+                @endforeach
+                    
+
+                <!-- <table>
                     <thead>
                         <tr>
                             <th>No</th>
@@ -64,7 +102,7 @@
                                 </td>
                                 <td>
                                     @if ($j->image)
-                                        <img src="{{ asset('/storage/' . $j->image) }}" alt="Jobs Image" style="width: 100px; height: auto;">
+                                        <img src="{{ asset('/storage/JobsImage/' . $j->image) }}" style="width: 100px; height: 100px; overlay: hidden;">
                                     @endif
                                 </td>
                                 <td>
@@ -89,7 +127,7 @@
                             </tr>
                         @endforeach
                     </tbody>
-                </table>
+                </table> -->
             </div>
         </div>
     </div>

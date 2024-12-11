@@ -26,4 +26,5 @@ class Works extends Model
     {
         return $this->belongsTo(Types::class,'type_id');
     }
+    
 }

@@ -32,9 +32,6 @@
             <label for="jobsCoverLetter">Jobs Cover Letter</label>
             <input type="file" name="cover_letter" id="jobsCoverLetter">
                 <br>
-            <label for="jobsStatus">Jobs Status</label>
-            <input type="text" name="status" id="jobsStatus">
-                <br>
             <button type="submit">
                 Assign Jobs
             </button>

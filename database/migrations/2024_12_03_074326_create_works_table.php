@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->text('description');
             $table->foreignId('location_id')->constrained('location')->onDelete('restrict');
-            $table->foreignId('company_id')->constrained('company')->onDelete('restrict');
+            $table->foreignId('company_id')->constrained('company')->onDelete('cascade');
             $table->foreignId('type_id')->constrained('types')->onDelete('restrict');
+            $table->integer('max_assign');
             $table->integer('salary');
             $table->timestamps();
         });

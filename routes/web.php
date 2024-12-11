@@ -10,6 +10,7 @@ use App\Http\Controllers\UserHomeController;
 use App\Http\Controllers\UserJobsController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\UserHistoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,11 +33,16 @@ Route::prefix('admin')->middleware('role:admin')->group(function() {
     Route::resource('company', AdminCompanyController::class)->names('admin.company');
     Route::resource('type', TypeController::class)->names('admin.type');
     Route::resource('application', ApplicationController::class)->names('admin.application');
+
+    Route::patch('/application/accepted/{id}', [ApplicationController::class, 'accepted'])->name('application.accepted');
+    Route::patch('/application/rejected/{id}', [ApplicationController::class, 'rejected'])->name('application.rejected');
+    Route::get('/application/{file}/download', [ApplicationController::class, 'download'])->name('application.download');
 });
 
 Route::prefix('user')->middleware('role:user|admin')->group(function() {
     Route::resource('home', UserHomeController::class)->names('user.home');
     Route::resource('jobs', UserJobsController::class)->names('user.jobs');
+    Route::resource('history', UserHistoryController::class)->names('user.history');
     Route::get('/jobs/assign/{id}', [UserJobsController::class, 'assign'])->name('user.jobs.assign');
 });
 

@@ -27,48 +27,57 @@ class AdminJobsController extends Controller
         return view('admin.jobs.create', compact('company', 'location', 'type'));
     }
 
+    public function show($job)
+    {
+        $job = Works::with('location', 'company', 'type')->findOrFail($job);
+
+        return view('admin.jobs.show', compact('job'));
+    }
+
     public function store(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'jobsTitle' => 'required|string|max:255',
-        //     'jobsImage' => 'required|image|mimes:jpg,png,jpeg|max:2048',
-        //     'jobsDescription' => 'required|string|max:5000',
-        //     'jobsCompany' => 'required|exists:company,id',
-        //     'jobsLocation' => 'required|exists:location,id',
-        //     'jobsType' => 'required|exists:types,id',
-        //     'jobsSalary' => 'required|string|max:255',
-        // ],[
-        //     'jobsTitle.required' => 'Jobs Title Field Is Required',
-        //     'jobsImage,mimes' => 'File Image Not Support',
-        //     'jobsImage.required' => 'Jobs Image Is Required',
-        //     'jobsCompany.required' => 'Jobs Company Field Is Required',
-        //     'jobsLocation.required' => 'Jobs Locatioon Field Is Required',
-        //     'jobsType.required' => 'Jobs Type Field Is Required',
-        //     'jobsSalary.required' => 'Jobs Salary Field Is Required',
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'jobsTitle' => 'required|string|max:255',
+            'jobsImage' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+            'jobsDescription' => 'required|string|max:5000',
+            'jobsCompany' => 'required|exists:company,id',
+            'jobsLocation' => 'required|exists:location,id',
+            'jobsType' => 'required|exists:types,id',
+            'jobsMax' => 'required|string|max:255',
+            'jobsSalary' => 'required|string|max:255',
+        ],[
+            'jobsTitle.required' => 'Jobs Title Field Is Required',
+            'jobsImage,mimes' => 'File Image Not Support',
+            'jobsImage.required' => 'Jobs Image Is Required',
+            'jobsCompany.required' => 'Jobs Company Field Is Required',
+            'jobsLocation.required' => 'Jobs Locatioon Field Is Required',
+            'jobsType.required' => 'Jobs Type Field Is Required',
+            'jobsSalary.required' => 'Jobs Salary Field Is Required',
+        ]);
 
-        //     if($validator->fails()) {
-        //         $error = $validator->errors();
-        //         return redirect()->route('admin.jobs.create')
-        //                         ->withErrors($validator)
-        //                         ->withInput();
-        //     }
+            if($validator->fails()) {
+                $error = $validator->errors();
+                return redirect()->route('admin.jobs.create')
+                                ->withErrors($validator)
+                                ->withInput();
+            }
 
         
             if ($request->hasFile('jobsImage')) {
                 $image = $request->file('jobsImage');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $path = $image->storeAs('JobsImage', $imageName, 'public');
+                $image->storeAs('JobsImage', $imageName, 'public');
             }
 
 
             Works::create([
                 'title' => $request->jobsTitle,
-                'image' => $path,
+                'image' => $imageName,
                 'description' => $request->jobsDescription,
                 'company_id' => $request->jobsCompany,
                 'location_id' => $request->jobsLocation,
                 'type_id' => $request->jobsType,
+                'max_assign' => $request->jobsMax,
                 'salary' => $request->jobsSalary,
             ]);
 
@@ -94,6 +103,7 @@ class AdminJobsController extends Controller
             'jobsCompany' => 'required|exists:company,id',
             'jobsLocation' => 'required|exists:location,id',
             'jobsType' => 'required|exists:types,id',
+            'jobsMax' => 'required|string|max:255',
             'jobsSalary' => 'required|string|max:255',
         ]);
 
@@ -109,26 +119,27 @@ class AdminJobsController extends Controller
             // dd($request);
 
             if ($request->hasFile('jobsImage')) {
-                    if ($job->image && file_exists(storage_path('app/public/JobsImage/' . $job->image))) {
-                    unlink(storage_path('app/public/JobsImage/' . $job->image));
+                    if ($job->image && file_exists(storage_path('storage/' . $job->image))) {
+                    unlink(storage_path('storage/' . $job->image));
                     }
 
-                    $image = $request->file('JobsImage');
+                    $image = $request->file('jobsImage');
                     $imageName = time() . '.' . $image->extension();
-                    $path = $image->storeAs('JobsImage', $imageName, 'public');
+                    $image->storeAs('JobsImage', $imageName, 'public');
                 } else {
-                    $path = $job->photo;
+                    $imageName = $job->image;
                 }
 
                 // dd($request);
 
                 $job->update([
                     'title' =>$request->jobsTitle,
-                    'image' =>$path,
+                    'image' =>$imageName,
                     'description' => $request->jobsDescription,
                     'company_id' => $request->jobsCompany,
                     'location_id' => $request->jobsLocation,
                     'type_id' => $request->jobsType,
+                    'max_assign' => $request->jobsMax,
                     'salary' => $request->jobsSalary,
                 ]);
 
