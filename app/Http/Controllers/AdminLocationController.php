@@ -24,10 +24,8 @@ class AdminLocationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'locationName' => 'required|string|max:255',
-            'locationDescription' => 'required|string|max:255',
         ],[
             'locationName.required' => 'Location Name Field Is Required',
-            'locationDescription.required' => 'Location Description Field Is Required',
         ]);
 
             if($validator->fails()) {
@@ -41,7 +39,6 @@ class AdminLocationController extends Controller
 
             Location::create([
                 'name' => $request->locationName,
-                'description' => $request->locationDescription,
             ]);
 
             return redirect()->route('admin.location.index')
@@ -57,10 +54,8 @@ class AdminLocationController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'locationName' => 'required|string|max:255',
-            'locationDescription' => 'required|string|max:255',
         ],[
             'locationName.required' => 'Location Name Field Is Reqired',
-            'locationDescription.required' => 'Location Description Field Is Required',
         ]);
 
             if($validator->fails()) {

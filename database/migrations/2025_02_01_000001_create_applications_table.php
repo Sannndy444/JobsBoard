@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('resume');
             $table->string('cover_letter');
             $table->enum('status', Status::values())->default(Status::Pending->value);
+            $table->date('date')->nullable();
+            $table->time('time')->nullable();
+            $table->text('link')->nullable();
             $table->timestamps();
         });
     }

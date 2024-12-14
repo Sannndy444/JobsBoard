@@ -59,23 +59,6 @@
         .job-card .details span {
             display: block;
         }
-
-        .job-card button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
-            transition: background-color 0.3s;
-        }
-
-        .job-card button:hover {
-            background-color: #45a049;
-        }
     </style>
 </head>
 <body>
@@ -111,24 +94,47 @@
 
     <div class="job-card-container">
         @foreach ($jobs as $j)
-            <div class="job-card">
-                <img src="{{ asset('/storage/JobsImage/' . $j->image) }}" alt="Job Image">
-                <div class="job-card-content">
-                    <h3>{{ $j->title }}</h3>
-                    <p>{{ $j->description }}</p>
-                    <div class="details">
-                        <span>Location: {{ $j->location->name }}</span>
-                        <span>Company: {{ $j->company->name }}</span>
+                <div class="job-card">
+                    <img src="{{ asset('/storage/JobsImage/' . $j->image) }}" alt="Job Image">
+                    <div class="job-card-content">
+                        <h3>{{ $j->title }}</h3>
+                        <p class="max-w-xs truncate">{{ $j->description }}</p>
+                        <div class="details">
+                            <span>Max Assign: {{ $j->max_assign }}</span>
+                            <span>{{ $j->company->name }}</span>
+                        </div>
+                        <div class="details">
+                            <span>Type: {{ $j->type->name }}</span>
+                            <span>Salary: ${{ $j->salary }}</span>
+                        </div>
+                        <button >
+                            <a href="{{ route('user.jobs.show', $j->id) }}">
+                                <button class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    Show More
+                                </button>
+                            </a>
+                        </button>
+                        @php
+                            // Ambil jumlah lamaran untuk pekerjaan ini
+                            $currentWorkCount = $workCounts->get($j->id)->total ?? 0; // jika tidak ada lamaran, default ke 0
+                        @endphp
+                        @if ($currentWorkCount < $j->max_assign)
+                            <form action="{{ route('user.jobs.assign', $j->id) }}" method="GET">
+                                <button type="submit" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                Assign Job
+                            </button>
+                            </form>
+                        @elseif ($existingAssign->has($j->id))
+                            <button class="focus:outline-none text-white bg-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600">
+                                Jobs Already Assign
+                            </button>
+                        @else
+                            <button class="focus:outline-none text-white bg-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600">
+                            Job Applicants Are Full
+                            </button>
+                        @endif
                     </div>
-                    <div class="details">
-                        <span>Type: {{ $j->type->name }}</span>
-                        <span>Salary: ${{ $j->salary }}</span>
-                    </div>
-                    <form action="{{ route('user.jobs.assign', $j->id) }}" method="GET">
-                        <button type="submit">Assign Job</button>
-                    </form>
                 </div>
-            </div>
         @endforeach
     </div>
 </body>

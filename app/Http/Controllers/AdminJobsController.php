@@ -8,12 +8,15 @@ use App\Models\Works;
 use App\Models\Location;
 use App\Models\Company;
 use App\Models\Types;
+use Illuminate\Support\Facades\Auth;
 
 class AdminJobsController extends Controller
 {
     public function index()
     {
         $jobs = Works::with('location', 'company', 'type')->get();
+
+        $tes = 'tes';
 
         return view('admin.jobs.index', compact('jobs'));
     }
@@ -27,11 +30,11 @@ class AdminJobsController extends Controller
         return view('admin.jobs.create', compact('company', 'location', 'type'));
     }
 
-    public function show($job)
+    public function show($workId)
     {
-        $job = Works::with('location', 'company', 'type')->findOrFail($job);
+        $jobs = Works::findOrFail($workId);
 
-        return view('admin.jobs.show', compact('job'));
+        return view('admin.jobs.show', compact('jobs'));
     }
 
     public function store(Request $request)

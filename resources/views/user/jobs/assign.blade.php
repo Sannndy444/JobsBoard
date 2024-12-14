@@ -6,35 +6,54 @@
     <title>Assign Jobs</title>
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen">
     <x-user-navbar></x-user-navbar>
 
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <div class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                </svg>
-                <span class="sr-only">Info</span>
-                <div>
-                    <span class="font-medium">Error Alert!</span> {{ $error }}
-                </div>
-            </div>
-        @endforeach
-    @endif
+    <div class="container mx-auto py-10 px-4">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-3xl mx-auto">
+            <h1 class="text-2xl font-bold mb-6">Assign Jobs</h1>
 
-    <form action="{{ route('user.jobs.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <input type="hidden" name="work_id" value="{{ $jobs }}">
-            <label for="jobsResume">Jobs Resume</label>
-            <input type="file" name="resume" id="jobsResume">
-                <br>
-            <label for="jobsCoverLetter">Jobs Cover Letter</label>
-            <input type="file" name="cover_letter" id="jobsCoverLetter">
-                <br>
-            <button type="submit">
-                Assign Jobs
-            </button>
-    </form>
+            @if (session('success'))
+                <div class="mb-4 p-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                    <ul class="list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <a href="{{ route('user.jobs.index') }}" class="text-blue-600 hover:underline">&larr; Back</a>
+
+            <form action="{{ route('user.jobs.store') }}" method="POST" class="mt-6 space-y-4" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" value="{{ $jobs }}" name="work_id">
+                <div>
+                    <label for="resume" class="block text-sm font-medium text-gray-700">Resume</label>
+                    <input type="file" name="resume" id="resume" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label for="coverLetter" class="block text-sm font-medium text-gray-700">Cover Letter</label>
+                    <input type="file" name="cover_letter" id="coverLetter" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Assign Jobs
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

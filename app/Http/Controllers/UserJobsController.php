@@ -9,6 +9,7 @@ use App\Models\Application;
 use App\Models\JobAssignments;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\Status;
+use Illuminate\Support\Facades\DB;
 
 
 class UserJobsController extends Controller
@@ -17,33 +18,54 @@ class UserJobsController extends Controller
     {
         $jobs = Works::with('company', 'location', 'type')->get();
         
+        $user = Auth::id();
+        
+        $existingAssign = Application::where('user_id', $user)
+                                    ->whereIn('work_id', $jobs->pluck('id'))
+                                    ->get()
+                                    ->keyBy('work_id');
 
-        return view('user.jobs.index', compact('jobs'));
+        $workCounts = Application::select('work_id', DB::raw('COUNT(*) as total'))
+                                ->groupBy('work_id')
+                                ->get()
+                                ->keyBy('work_id');
+
+                                
+
+        return view('user.jobs.index', compact('jobs', 'existingAssign', 'workCounts'));
     }
 
     public function create($id)
     {
-        dd($id);
         return view('user.jobs.create');
     }
 
-    public function show($job)
+    public function show($workId)
     {
-        return view('user.jobs.show', compact('job'));
+        $user = Auth::id();
+        $jobs = Works::findOrFail($workId);
+
+        $existingAssign = Application::where('user_id', $user)
+                                        ->where('work_id', $jobs)
+                                        ->first();
+
+        return view('user.jobs.show', compact('jobs', 'existingAssign'));
     }
 
-    public function store(Request $request, Works $jobs)
+    public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'work_id' => 'required|exists:work,id',
-            'resume' => 'required|mimes:pdf|max:2048',
-            'cover_letter' => 'required|mimes:pdf|max:2048',
+            'resume' => 'required|mimes:pdf|max:5048',
+            'cover_letter' => 'required|mimes:pdf|max:5048',
+            'date' => 'nuulable|date',
+            'time' => 'nullable|date_format:H:i',
+            'link' => 'nullable|string|max:5000'
         ]);
 
             if($validator->fails()) {
                 $error = $validator->errors();
-                return redirect()->route('user.jobs.index')
+                return redirect()->route('user.jobs.assign')
                                 ->withErrors($validator)
                                 ->withInput();
             }
@@ -54,7 +76,7 @@ class UserJobsController extends Controller
 
                 Application::create([
                     'work_id' => $request->work_id,
-                    'user_id' => auth()->id(),
+                    'user_id' => Auth::id(),
                     'resume' => $resume,
                     'cover_letter' => $cover_letter,
                     'status' => Status::Pending,
@@ -79,7 +101,4 @@ class UserJobsController extends Controller
         }
         return null;
     }
-
-    
-
 }

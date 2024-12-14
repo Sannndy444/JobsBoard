@@ -25,7 +25,7 @@ class AdminCompanyController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'companyName' => 'required|string|max:255',
-            'companyDescription' => 'required|string|max:255',
+            'companyDescription' => 'required|string|max:5000',
         ],[
             'companyName.required' => 'Company Name Field Is Required',
             'companyDescription.required' => 'Company Description Field Is Required',
@@ -57,7 +57,7 @@ class AdminCompanyController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'companyName' => 'required|string|max:255',
-            'companyDescription' => 'required|string|max:255',
+            'companyDescription' => 'required|string|max:5000',
         ],[
             'companyName.required' => 'Name Field Is Required',
             'companyDescription.required' => 'Description Field Is Required',

@@ -18,28 +18,43 @@
 
     <!-- Main Content -->
     <main class="flex-grow container mx-auto px-4 py-8">
-        @foreach ($job as $j)
-            <div class="bg-white shadow-lg rounded-lg p-6">
-                <h2 class="text-2xl font-semibold mb-4">{{ $j->title }}</h2>
+        
+            <div class="bg-white shadow-lg rounded-lg p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h2 class="text-2xl font-semibold mb-4">{{ $jobs->title }}</h2>
                     <p class="text-gray-700 leading-relaxed">
-                        This is the detailed information for the selected item. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Aenean vehicula fermentum leo, nec sagittis nisi feugiat ac. Nulla sit amet nulla a libero gravida dignissim.
+                        Company Name : {{ $jobs->company->name }}
                     </p>
                     <p class="text-gray-700 leading-relaxed mt-4">
-                        Additional details can be added here. Duis ut sapien velit. Donec vel est sed purus tincidunt fringilla. Mauris 
-                        ullamcorper risus sed lorem viverra feugiat.
+                        Type : {{ $jobs->type->name }}
                     </p>
+                    <p class="text-gray-700 leading-relaxed mt-4">
+                        Location : {{ $jobs->location->name }}
+                    </p>
+                    <p class="text-gray-700 leading-relaxed mt-4">
+                        Max Assign : {{ $jobs->max_assign }}
+                    </p>
+                    <p class="text-gray-700 leading-relaxed mt-4">
+                        Salary : ${{ $jobs->salary }}/m
+                    </p>
+                    <p class="text-gray-700 leading-relaxed mt-4">
+                        {{ $jobs->description }}
+                    </p>
+                </div>
+                <div>
+                    <img src="{{ asset('/storage/JobsImage/' . $jobs->image) }}" alt="" class="w-full h-auto max-w-full max-h-[200px] object-cover">
+                </div>
             </div>
-        @endforeach
+       
         
 
         <!-- Button Section -->
         <div class="flex justify-between mt-10">
-            <a href="/previous-page" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition">
+            <a href="{{ route('admin.jobs.index') }}" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition">
                 Back
             </a>
-            <a href="/next-page" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
-                Next
+            <a href="{{ route('admin.jobs.edit', $jobs->id) }}" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+                Edit
             </a>
         </div>
     </main>

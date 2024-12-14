@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Works;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Enums\Status;
+use Carbon\Carbon;
+use Response;
 
 class ApplicationController extends Controller
 {
@@ -16,7 +20,17 @@ class ApplicationController extends Controller
         $application = Application::all();
         $file = Application::latest()->paginate(10);
 
-        return view('admin.application.index', compact('application', 'file'));
+        $accept = Status::Accepted;
+
+        $statusAccept = Application::where('status', $accept)
+                                    ->pluck('id');
+
+        $reject = Status::Rejected;
+
+        $statusReject = Application::where('status', $reject)
+                                    ->pluck('id');
+
+        return view('admin.application.index', compact('application', 'file', 'statusAccept', 'statusReject'));
     }
 
     /**
@@ -69,7 +83,7 @@ class ApplicationController extends Controller
 
     public function download(Application $file)
     {
-        $filePath = storage_path("/storage/{$file}");
+        $filePath = storage_path("app/{$file}");
 
         if (file_exists($filePath)) {
             return response()->download($filePath, $file);
@@ -78,12 +92,32 @@ class ApplicationController extends Controller
         }
     }
 
-    public function accepted($id)
+    public function accepted(Request $request, $id)
     {
         $application = Application::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'date' => 'required|date',
+            'time' => 'required|date_format:H:i',
+            'link' => 'required|string|max:5000'
+        ]);
+
+            if($validator->fails()) {
+                $error = $validator->errors();
+                return redirect()->route('admin.application.index')
+                                ->withErrors($validator)
+                                ->withInput();
+            }
+
+        $dueDate = Carbon::createFromFormat('m/d/Y', $request->input('date'))->format('Y-m-d');
         
-        $application->status = Status::Accepted; // Jika status adalah enum
-        $application->save();
+        $application->update([
+            'status' => Status::Accepted,
+            'date' => $dueDate,
+            'time' => $request->time,
+            'link' => $request->link
+        ]);
+        
 
         return redirect()->route('admin.application.index')
                         ->with('success', 'Status Update Success');
@@ -99,5 +133,19 @@ class ApplicationController extends Controller
         return redirect()->route('admin.application.index')
                         ->with('success', 'Status Update Success');
     }
+
+    // public function link(Request $request, $jobs)
+    // {
+        
+
+    //         Application::create([
+    //             'date' => $request->date,
+    //             'time' => $request->time,
+    //             'link' => $request->link,
+    //         ]);
+
+    //         return redirect()->route('admin.application.index')
+    //                         ->with('success', 'Accepted Application Is Success');
+    // }
 }
 
