@@ -21,17 +21,25 @@ class ApplicationController extends Controller
         $application = Application::all();
         $file = Application::latest()->paginate(10);
 
-        $accept = Status::Accepted;
+        // $accept = Status::Accepted;
 
-        $statusAccept = Application::where('status', $accept)
-                                    ->pluck('id');
+        // $statusAccept = Application::where('status', $accept)
+        //                             ->pluck('id');
 
-        $reject = Status::Rejected;
+        // $reject = Status::Rejected;
 
-        $statusReject = Application::where('status', $reject)
-                                    ->pluck('id');
+        // $statusReject = Application::where('status', $reject)
+        //                             ->pluck('id');
 
-        return view('admin.application.index', compact('application', 'file', 'statusAccept', 'statusReject'));
+        // $pending = Status::Pending;
+        // $statusPending = Application::where('status', $pending)
+        //                             ->pluck('id');
+
+        $statusAccept = Application::where('status', Status::Accepted)->pluck('id');
+        $statusPending = Application::where('status', Status::Pending)->pluck('id');
+        $statusReject = Application::where('status', Status::Rejected)->pluck('id');
+
+        return view('admin.application.index', compact('application', 'file', 'statusAccept', 'statusReject', 'statusPending'));
     }
 
     /**
