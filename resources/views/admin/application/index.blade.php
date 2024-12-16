@@ -45,28 +45,16 @@
 
                     <div class="mb-2">
                         <p class="text-sm font-medium">Resume:</p>
-                        @if ($a->resume)
-                            @forelse ($file as $f)
-                                <a href="{{ route('application.download', $f->resume) }}">Download</a>
-                            @empty
-                                No
-                            @endforelse
-                        @else
-                            <p class="text-gray-500">No resume uploaded</p>
-                        @endif
+                            <a href="{{ route('application.download.resume', $a->resume) }}" class="text-blue-500 hover:underline">
+                                Download
+                            </a>
                     </div>
 
                     <div class="mb-2">
                         <p class="text-sm font-medium">Cover Letter:</p>
-                        @if ($a->cover_letter)
-                            @forelse ($file as $f)
-                                <a href="{{ route('application.download', $f->cover_letter) }}">Download</a>
-                            @empty
-                                No
-                            @endforelse
-                        @else
-                            <p class="text-gray-500">No resume uploaded</p>
-                        @endif
+                            <a href="{{ route('application.download.cover', $a->cover_letter) }}" class="text-blue-500 hover:underline">
+                                Download
+                            </a>
                     </div>
 
                     <div class="mt-4">

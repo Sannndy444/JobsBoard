@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Application;
 use App\Models\Works;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Enums\Status;
 use Carbon\Carbon;
@@ -81,15 +82,32 @@ class ApplicationController extends Controller
         //
     }
 
-    public function download(Application $file)
+    public function downloadResume($nameFile)
     {
-        $filePath = storage_path("app/{$file}");
+        // Lokasi file
+        $filePath = "storage/resume/{$nameFile}";
 
-        if (file_exists($filePath)) {
-            return response()->download($filePath, $file);
-        } else {
+        // Cek apakah file ada
+        if (!Storage::disk('public')->exists($filePath)) {
             abort(404, 'File not found');
         }
+
+        // Proses download file
+        return Storage::disk('public')->download($filePath, $nameFile);
+    }
+
+    public function downloadCover($fileName)
+    {
+        // Lokasi file
+        $filePath = "storage/CoverLetter/{$fileName}";
+
+        // Cek apakah file ada
+        if (!Storage::disk('public')->exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        // Proses download file
+        return Storage::disk('public')->download($filePath, $fileName);
     }
 
     public function accepted(Request $request, $id)

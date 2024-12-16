@@ -20,6 +20,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/storage/{nameFile}', [ApplicationController::class, 'downloadResume'])->name('application.download.resume');
+Route::get('/storage/{fileName}', [ApplicationController::class, 'downloadCover'])->name('application.download.cover');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -36,7 +39,7 @@ Route::prefix('admin')->middleware('role:admin')->group(function() {
 
     Route::patch('/application/accepted/{id}', [ApplicationController::class, 'accepted'])->name('application.accepted');
     Route::patch('/application/rejected/{id}', [ApplicationController::class, 'rejected'])->name('application.rejected');
-    Route::get('/application/{file}/download', [ApplicationController::class, 'download'])->name('application.download');
+    
 });
 
 Route::prefix('user')->middleware('role:user|admin')->group(function() {
